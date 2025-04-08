@@ -21,7 +21,7 @@
             <artifactId>javafx-controls</artifactId>
             <version>17.0.1</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+        <!-- Conector de MySQL -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -31,6 +31,7 @@
 
     <build>
         <plugins>
+            <!-- Plugin para JavaFX -->
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
@@ -39,7 +40,35 @@
                     <mainClass>eight.group.Main</mainClass>
                 </configuration>
             </plugin>
+
+            <!-- Plugin para ejecutar scripts SQL -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>sql-maven-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>execute-sql</id>
+                        <!-- Se ejecuta en la fase 'initialize' -->
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!-- Driver JDBC para MySQL -->
+                    <driver>com.mysql.cj.jdbc.Driver</driver>
+                    <url>jdbc:mysql://localhost:3306/todo_list</url>
+                    <username>root</username>
+                    <password>password</password>
+                    <srcFiles>
+                        <srcFile>database/dataBase.sql</srcFile>
+                    </srcFiles>
+                    <delimiter>;</delimiter>
+                    <onError>abort</onError>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
-
 </project>
