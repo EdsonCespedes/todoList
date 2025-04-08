@@ -1,0 +1,4 @@
+# config.properties.example
+db.url=jdbc:mysql://localhost:3306/mi_proyecto
+db.user=usuario_ejemplo
+db.password=contraseña_ejemplo
