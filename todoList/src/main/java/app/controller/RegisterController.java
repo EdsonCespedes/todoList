@@ -1,17 +1,18 @@
 package app.controller;
 
+import app.DBConnection;
+import app.dao.UsuarioDAO;
 import javafx.fxml.FXML;
-import javafx.scene.control.TextField;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.Label;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.stage.Stage;
+import javafx.scene.Parent;
 
-import jakarta.mail.*;
-import jakarta.mail.internet.InternetAddress;
-import jakarta.mail.internet.MimeMessage;
-
-import java.util.Properties;
-import java.util.regex.Pattern;
-
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class RegisterController {
 
@@ -19,81 +20,81 @@ public class RegisterController {
     private TextField emailField;
 
     @FXML
-    private PasswordField passwordField;
+    private PasswordField contrasenaField;
 
     @FXML
-    private PasswordField confirmPasswordField;
+    private PasswordField confirmarContrasenaField;
 
     @FXML
     private Label statusLabel;
 
     @FXML
-    public void handleRegister() {
-        String email = emailField.getText().trim();
-        String password = passwordField.getText();
-        String confirmPassword = confirmPasswordField.getText();
+    private TextField nombreField;
 
-        if (!isValidEmail(email)) {
+    @FXML
+    public void handleRegister() {
+        String nombre = nombreField.getText().trim();
+        String email = emailField.getText().trim();
+        String contrasena = contrasenaField.getText();
+        String confirmarContrasena = confirmarContrasenaField.getText();
+
+        UsuarioDAO usuarioDAO = new UsuarioDAO();
+
+        if (!email.matches("^[\\w.-]+@[\\w.-]+\\.\\w+$")) {
             statusLabel.setText("Correo inválido.");
             return;
         }
 
-        if (!isValidPassword(password)) {
-            statusLabel.setText("La contraseña debe tener al menos 1 mayúscula, 1 minúscula y 1 número.");
+        if (!contrasena.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$")) {
+            statusLabel.setText("Contraseña débil.");
             return;
         }
 
-        if (!password.equals(confirmPassword)) {
+        if (!contrasena.equals(confirmarContrasena)) {
             statusLabel.setText("Las contraseñas no coinciden.");
             return;
         }
 
-        if (!sendEmailConfirmation(email)) {
-            statusLabel.setText("No se pudo enviar el correo. Registro cancelado.");
+        if (usuarioDAO.existeUsuario(email)) {
+            statusLabel.setText("Correo ya registrado.");
             return;
         }
 
-        statusLabel.setText("¡Registro exitoso!");
-        // Aquí se puede guardar en la base de datos
-    }
 
-    private boolean isValidEmail(String email) {
-        return Pattern.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", email);
-    }
+        try (Connection conn = DBConnection.getConnection()) {
+            conn.setAutoCommit(false);
+            PreparedStatement stmt = conn.prepareStatement("INSERT INTO usuario (nombre, email, contrasena) VALUES (?, ?, ?)");
+            stmt.setString(1, nombre);
+            stmt.setString(2, email);
+            stmt.setString(3, contrasena);
+            stmt.executeUpdate();
+            conn.commit();
+            statusLabel.setText("Registro exitoso, redirigiendo...");
 
-    private boolean isValidPassword(String password) {
-        return Pattern.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$", password);
-    }
-
-    private boolean sendEmailConfirmation(String to) {
-        final String from = "fruukz@gmail.com";
-        final String pass = "xkmydqafyivqbwmz";
-
-        Properties props = new Properties();
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.port", "587");
-
-        Session session = Session.getInstance(props, new Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(from, pass);
-            }
-        });
-        session.setDebug(true);
-
-        try {
-            Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(from));
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
-            message.setSubject("¡Registro exitoso!");
-            message.setText("Hola, gracias por registrarte en la app To-Do List.");
-
-            Transport.send(message);
-            return true;
-        } catch (MessagingException e) {
+            // Este bloque también puede lanzar IOException, así que debe ir dentro del try
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/login.fxml"));
+            Stage stage = (Stage) emailField.getScene().getWindow();
+            stage.setScene(new Scene(loader.load()));
+        } catch (SQLException e) {
+            statusLabel.setText("Error al registrar el usuario.");
             e.printStackTrace();
-            return false;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void goToLogin() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Login.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) emailField.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Login");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
+

@@ -1,0 +1,43 @@
+.root {
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-background-color: #f5f5f5;
+}
+
+.titulo {
+    -fx-font-size: 24px;
+    -fx-text-fill: #333;
+    -fx-padding: 10 0 20 0;
+}
+
+.text-field, .password-field {
+    -fx-pref-width: 250px;
+    -fx-padding: 8;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-border-color: #ccc;
+}
+
+.button {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-padding: 10 20;
+    -fx-background-radius: 6px;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #45a049;
+}
+
+.link-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #0066cc;
+    -fx-underline: true;
+    -fx-cursor: hand;
+}
+
+.cancel-button {
+    -fx-background-color: #ddd;
+    -fx-text-fill: #333;
+}
+

@@ -1,5 +1,14 @@
+app\controller\TaskController.class
 app\controller\RegisterController.class
-app\controller\LoginController.class
+app\model\Task.class
+app\controller\DashboardController.class
+app\model\Usuario.class
+app\model\Category.class
 app\DBConnection.class
 app\Main.class
-app\controller\RegisterController$1.class
+app\dao\TaskDAO.class
+app\dao\CategoriaDAO.class
+app\dao\UsuarioDAO.class
+app\controller\LoginController.class
+app\model\Label.class
+app\dao\LabelDAO.class
