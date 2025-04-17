@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="app.controller.LoginController" prefWidth="400" prefHeight="250">
+    <children>
+        <VBox spacing="10" alignment="CENTER" layoutX="50" layoutY="30">
+            <children>
+                <Label text="Iniciar sesión" style="-fx-font-size: 18px;" />
+                <TextField fx:id="emailField" promptText="Correo electrónico" />
+                <PasswordField fx:id="passwordField" promptText="Contraseña" />
+                <Button text="Ingresar" onAction="#handleLogin" />
+                <Hyperlink text="¿No tienes cuenta? Regístrate" onAction="#goToRegister" />
+                <Label fx:id="statusLabel" textFill="red" />
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>
+
