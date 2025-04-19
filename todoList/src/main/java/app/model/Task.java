@@ -25,17 +25,8 @@ public class Task {
         return id;
     }
 
-    // Getter de la sección
-    public String getSection() {
-        return section;
-    }
-
     public String getTask() {
         return task.get();
-    }
-
-    public void setTask(String task) {
-        this.task.set(task);
     }
 
     public StringProperty taskProperty() {

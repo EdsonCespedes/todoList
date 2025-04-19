@@ -75,17 +75,6 @@ public class CategoriaDAO {
         }
     }
 
-    public void eliminarCategoria(String nombreCategoria) {
-        try (Connection conn = DBConnection.getConnection()) {
-            String sql = "DELETE FROM categorias WHERE nombre = ?";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, nombreCategoria);
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
 
 }
 

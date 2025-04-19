@@ -117,6 +117,8 @@ public class DashboardController {
             this.usuario = usuario;
             welcomeLabel.setText("Bienvenido, " + usuario.getNombre() + "!");
             tasks.setAll(taskDAO.obtenerTareasPorUsuario(usuario.getId()));
+            String primeraSeccion = sectionComboBox.getValue();
+            filtrarTareasPorSeccion(primeraSeccion);
         } else {
             welcomeLabel.setText("Bienvenido!");
         }

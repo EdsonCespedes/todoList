@@ -52,19 +52,6 @@ public class TaskDAO {
         }
     }
 
-    public void actualizarEstado(Task task, String nuevoEstado, int usuarioId) {
-        try (Connection conn = DBConnection.getConnection()) {
-            String sql = "UPDATE tarea SET estado = ? WHERE usuario_id = ? AND titulo = ?";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, nuevoEstado);
-            stmt.setInt(2, usuarioId);
-            stmt.setString(3, task.getTask());
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     public List<Task> obtenerTareasPorSeccion(int usuarioId, String nombreCategoria) {
         List<Task> tareas = new ArrayList<>();
 

@@ -1,4 +1,3 @@
-// Main.Java.app/DBConnection.java
 package app;
 
 import java.sql.Connection;

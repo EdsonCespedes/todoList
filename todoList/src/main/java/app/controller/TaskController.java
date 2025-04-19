@@ -1,15 +1,10 @@
 package app.controller;
 
-import app.DBConnection;
 import app.model.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.collections.*;
 import app.dao.CategoriaDAO;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 
 public class TaskController {
     @FXML private TableView<Task> taskTable;
@@ -32,7 +27,7 @@ public class TaskController {
         statusColumn.setCellValueFactory(data -> data.getValue().statusProperty());
 
         statusComboBox.getItems().clear();
-        statusComboBox.getItems().addAll("Pendiente", "En progreso", "Completad0");
+        statusComboBox.getItems().addAll("Pendiente", "En progreso", "Completado");
         statusComboBox.getSelectionModel().selectFirst();
 
         // Cargar las secciones desde la base de datos
