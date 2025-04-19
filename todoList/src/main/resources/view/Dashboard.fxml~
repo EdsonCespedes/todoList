@@ -20,7 +20,6 @@
             <HBox spacing="10">
                 <ComboBox fx:id="sectionComboBox" prefWidth="150" prefHeight="34"/>
                 <Button text="Agregar sección" onAction="#handleAddSection"/>
-                <Button fx:id="logoutButton" text="Cerrar sesión" onAction="#handleLogout"/>
             </HBox>
 
             <TableView fx:id="taskTable" prefHeight="300" prefWidth="600">

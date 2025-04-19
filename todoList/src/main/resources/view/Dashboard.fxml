@@ -18,8 +18,9 @@
                 <Insets top="20" right="20" bottom="20" left="20"/>
             </padding>
             <HBox spacing="10">
-                <ComboBox fx:id="sectionComboBox" prefWidth="200"/>
+                <ComboBox fx:id="sectionComboBox" prefWidth="150" prefHeight="34"/>
                 <Button text="Agregar sección" onAction="#handleAddSection"/>
+                <Button fx:id="logoutButton" text="Cerrar sesión" onAction="#handleLogout"/>
             </HBox>
 
             <TableView fx:id="taskTable" prefHeight="300" prefWidth="600">
@@ -30,8 +31,8 @@
             </TableView>
 
             <HBox spacing="10">
-                <TextField fx:id="taskField" promptText="Nueva tarea" prefWidth="300"/>
-                <ComboBox fx:id="statusComboBox" prefWidth="150"/>
+                <TextField fx:id="taskField" promptText="Nueva tarea" prefWidth="300" prefHeight="35"/>
+                <ComboBox fx:id="statusComboBox" prefWidth="150" prefHeight="35"/>
                 <Button text="Agregar tarea" onAction="#handleAddTask"/>
                 <Button fx:id="changeStatusButton" text="Cambiar Estado" onAction="#handleChangeStatus"/>
                 <Button fx:id="deleteTaskButton" text="Eliminar Tarea" onAction="#handleDeleteTask"/>

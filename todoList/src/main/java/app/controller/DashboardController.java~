@@ -41,9 +41,6 @@ public class DashboardController {
     private Button deleteTaskButton;
 
     @FXML
-    private Button logoutButton;
-
-    @FXML
     private Button changeStatusButton;
 
     @FXML

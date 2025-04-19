@@ -54,10 +54,10 @@ public class LoginController {
                 e.printStackTrace();
             }
         } else {
-            statusLabel.setText("Credenciales incorrectas");
+            // Mostrar un mensaje de error si las credenciales son incorrectas
+            showAlert("Error", "Credenciales incorrectas", Alert.AlertType.ERROR);
         }
     }
-
 
     @FXML
     public void goToRegister() {
@@ -70,6 +70,14 @@ public class LoginController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void showAlert(String title, String message, Alert.AlertType alertType) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }
 

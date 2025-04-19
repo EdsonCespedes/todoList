@@ -12,23 +12,31 @@ public class UsuarioDAO {
 
     public Usuario validarUsuario(String email, String contrasena) {
         Usuario usuario = null;
-        String query = "SELECT * FROM usuario WHERE email = ? AND contrasena = ?";
+        String query = "SELECT * FROM usuario WHERE email = ?";
 
         try (Connection connection = DBConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, email);
-            statement.setString(2, contrasena);
 
+            statement.setString(1, email);
             ResultSet resultSet = statement.executeQuery();
+
             if (resultSet.next()) {
-                // Asegúrate de incluir 'nombre' aquí
-                usuario = new Usuario(resultSet.getInt("id_usuario"), resultSet.getString("nombre"), resultSet.getString("email"), resultSet.getString("contrasena"));
+                String hashedPassword = resultSet.getString("contrasena");
+                if (org.mindrot.jbcrypt.BCrypt.checkpw(contrasena, hashedPassword)) {
+                    usuario = new Usuario(
+                            resultSet.getInt("id_usuario"),
+                            resultSet.getString("nombre"),
+                            resultSet.getString("email"),
+                            hashedPassword
+                    );
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return usuario;
     }
+
 
 
     public boolean existeUsuario(String email) {

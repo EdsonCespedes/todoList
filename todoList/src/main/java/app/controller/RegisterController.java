@@ -2,6 +2,7 @@ package app.controller;
 
 import app.DBConnection;
 import app.dao.UsuarioDAO;
+import jakarta.mail.MessagingException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -46,7 +47,7 @@ public class RegisterController {
         }
 
         if (!contrasena.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$")) {
-            statusLabel.setText("Contraseña débil.");
+            statusLabel.setText("Contraseña débil. Usa mayúsculas, minúsculas y números.");
             return;
         }
 
@@ -60,28 +61,43 @@ public class RegisterController {
             return;
         }
 
-
         try (Connection conn = DBConnection.getConnection()) {
             conn.setAutoCommit(false);
-            PreparedStatement stmt = conn.prepareStatement("INSERT INTO usuario (nombre, email, contrasena) VALUES (?, ?, ?)");
+
+            PreparedStatement stmt = conn.prepareStatement(
+                    "INSERT INTO usuario (nombre, email, contrasena) VALUES (?, ?, ?)"
+            );
             stmt.setString(1, nombre);
             stmt.setString(2, email);
-            stmt.setString(3, contrasena);
+            String hashedPassword = org.mindrot.jbcrypt.BCrypt
+                    .hashpw(contrasena, org.mindrot.jbcrypt.BCrypt.gensalt());
+            stmt.setString(3, hashedPassword);
             stmt.executeUpdate();
-            conn.commit();
-            statusLabel.setText("Registro exitoso, redirigiendo...");
 
-            // Este bloque también puede lanzar IOException, así que debe ir dentro del try
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/login.fxml"));
-            Stage stage = (Stage) emailField.getScene().getWindow();
-            stage.setScene(new Scene(loader.load()));
-        } catch (SQLException e) {
+            try {
+                // Enviar el correo
+                app.util.MailService.enviarCorreoBienvenida(email, nombre);
+
+                // Confirmar solo si se envió el correo
+                conn.commit();
+                statusLabel.setText("Registro exitoso. Redirigiendo...");
+
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/login.fxml"));
+                Stage stage = (Stage) emailField.getScene().getWindow();
+                stage.setScene(new Scene(loader.load()));
+            } catch (MessagingException mex) {
+                conn.rollback();
+                statusLabel.setText("No se pudo enviar el correo de bienvenida. Inténtalo más tarde.");
+                mex.printStackTrace();
+            }
+
+        } catch (SQLException | IOException e) {
             statusLabel.setText("Error al registrar el usuario.");
-            e.printStackTrace();
-        } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+
 
     @FXML
     public void goToLogin() {

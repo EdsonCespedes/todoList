@@ -1,4 +1,5 @@
 app\controller\TaskController.class
+app\util\MailService.class
 app\controller\RegisterController.class
 app\model\Task.class
 app\controller\DashboardController.class
@@ -7,6 +8,7 @@ app\model\Category.class
 app\DBConnection.class
 app\Main.class
 app\dao\TaskDAO.class
+app\util\MailService$1.class
 app\dao\CategoriaDAO.class
 app\dao\UsuarioDAO.class
 app\controller\LoginController.class
