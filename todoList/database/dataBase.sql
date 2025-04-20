@@ -5,59 +5,59 @@ USE todo_list;
 
 -- Tabla de categorías: clasifica las tareas.
 CREATE TABLE IF NOT EXISTS categorias (
-                                          id_categoria INT NOT NULL AUTO_INCREMENT,
-                                          nombre VARCHAR(100) NOT NULL,
-    creada_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    actualizada_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY (id_categoria)
-    );
+                            id_categoria INT NOT NULL AUTO_INCREMENT,
+                            nombre VARCHAR(100) NOT NULL,
+                            creada_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                            actualizada_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                            PRIMARY KEY (id_categoria)
+);
 
 -- Tabla de usuario: para la autenticación y gestión de usuarios.
 CREATE TABLE IF NOT EXISTS usuario (
-                                       id_usuario INT NOT NULL AUTO_INCREMENT,
-                                       nombre VARCHAR(100) NOT NULL,
-    email VARCHAR(100) NOT NULL UNIQUE,
-    contrasena VARCHAR(255) NOT NULL,
-    creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    actualizado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY (id_usuario)
-    );
+                         id_usuario INT NOT NULL AUTO_INCREMENT,
+                         nombre VARCHAR(100) NOT NULL,
+                         email VARCHAR(100) NOT NULL UNIQUE,
+                         contrasena VARCHAR(255) NOT NULL,
+                         creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                         actualizado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                         PRIMARY KEY (id_usuario)
+);
 
 -- Tabla de tarea: con la información principal de la tarea.
 -- Se mantiene la columna 'estado' con ENUM para un estado inmediato.
 CREATE TABLE IF NOT EXISTS tarea (
-                                     id_tarea INT NOT NULL AUTO_INCREMENT,
-                                     titulo VARCHAR(255) NOT NULL,
-    descripcion TEXT DEFAULT NULL,
-    estado ENUM('Nueva', 'En Progreso', 'Completado', 'Pendiente') DEFAULT 'Nueva',
-    completada BOOLEAN DEFAULT FALSE,
-    fecha_limite DATE DEFAULT NULL,
-    categoria_id INT NOT NULL,
-    usuario_id INT NOT NULL,
-    creada_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    actualizada_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY (id_tarea),
-    CONSTRAINT fk_tarea_categoria FOREIGN KEY (categoria_id) REFERENCES categorias(id_categoria),
-    CONSTRAINT fk_tarea_usuario FOREIGN KEY (usuario_id) REFERENCES usuario(id_usuario)
-    );
+                       id_tarea INT NOT NULL AUTO_INCREMENT,
+                       titulo VARCHAR(255) NOT NULL,
+                       descripcion TEXT DEFAULT NULL,
+                       estado ENUM('Nueva', 'En Progreso', 'Completado', 'Pendiente') DEFAULT 'Nueva',
+                       completada BOOLEAN DEFAULT FALSE,
+                       fecha_limite DATE DEFAULT NULL,
+                       categoria_id INT NOT NULL,
+                       usuario_id INT NOT NULL,
+                       creada_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                       actualizada_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                       PRIMARY KEY (id_tarea),
+                       CONSTRAINT fk_tarea_categoria FOREIGN KEY (categoria_id) REFERENCES categorias(id_categoria),
+                       CONSTRAINT fk_tarea_usuario FOREIGN KEY (usuario_id) REFERENCES usuario(id_usuario)
+);
 
 -- Tabla de etiqueta: almacena las etiquetas para las tareas.
 CREATE TABLE IF NOT EXISTS etiqueta (
-                                        id_etiqueta INT NOT NULL AUTO_INCREMENT,
-                                        nombre VARCHAR(100) NOT NULL,
-    creada_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    actualizada_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY (id_etiqueta)
-    );
+                          id_etiqueta INT NOT NULL AUTO_INCREMENT,
+                          nombre VARCHAR(100) NOT NULL,
+                          creada_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                          actualizada_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                          PRIMARY KEY (id_etiqueta)
+);
 
 -- Tabla intermedia tarea_etiqueta: representa la relación muchos a muchos entre tareas y etiquetas.
 CREATE TABLE IF NOT EXISTS tarea_etiqueta (
-                                              tarea_id INT NOT NULL,
-                                              etiqueta_id INT NOT NULL,
-                                              PRIMARY KEY (tarea_id, etiqueta_id),
-    CONSTRAINT fk_tarea_etiqueta_tarea FOREIGN KEY (tarea_id) REFERENCES tarea(id_tarea),
-    CONSTRAINT fk_tarea_etiqueta_etiqueta FOREIGN KEY (etiqueta_id) REFERENCES etiqueta(id_etiqueta)
-    );
+                                tarea_id INT NOT NULL,
+                                etiqueta_id INT NOT NULL,
+                                PRIMARY KEY (tarea_id, etiqueta_id),
+                                CONSTRAINT fk_tarea_etiqueta_tarea FOREIGN KEY (tarea_id) REFERENCES tarea(id_tarea),
+                                CONSTRAINT fk_tarea_etiqueta_etiqueta FOREIGN KEY (etiqueta_id) REFERENCES etiqueta(id_etiqueta)
+);
 
 
 -- inserts
@@ -475,4 +475,79 @@ SELECT * FROM etiqueta;
 END$$
 
 DELIMITER ;
+
+
+-- ==============================================
+-- INSERTS DE CATEGORÍAS
+-- ==============================================
+-- Se crean categorías iniciales para asignar a las tareas.
+INSERT INTO categorias (nombre) VALUES
+                                    ('General'),               -- id_categoria = 1
+                                    ('Casa'),                  -- id_categoria = 2
+                                    ('Compras'),               -- id_categoria = 3
+                                    ('Base de datos 2'),       -- id_categoria = 4
+                                    ('Comunicación 1'),        -- id_categoria = 5
+                                    ('Desarrollo de Software 2'), -- id_categoria = 6
+                                    ('Redes 1'),               -- id_categoria = 7
+                                    ('Sistemas Operativos 2'), -- id_categoria = 8
+                                    ('Historia');              -- id_categoria = 9
+
+-- ==============================================
+-- INSERTS DE USUARIOS
+-- ==============================================
+--
+INSERT INTO usuario (nombre, email, contrasena) VALUES
+                                                    ('Juan Pérez',     'juan.perez@example.com',    'hash_pw_juan'),
+                                                    ('María López',    'maria.lopez@example.com',   'hash_pw_maria'),
+                                                    ('Carlos García',  'carlos.garcia@example.com', 'hash_pw_carlos'),
+                                                    ('Ana Fernández',  'ana.fernandez@example.com', 'hash_pw_ana'),
+                                                    ('Luis Martínez',  'luis.martinez@example.com', 'hash_pw_luis');
+
+-- ==============================================
+-- INSERTS DE TAREAS POR USUARIO
+-- ==============================================
+-- Usuario 1: Juan Pérez (id_usuario = 1)
+INSERT INTO tarea (titulo, descripcion, estado, fecha_limite, categoria_id, usuario_id) VALUES
+                                                                                            ('Lavar los platos',               'Lavar todos los platos del día',                     'Nueva', '2025-04-17', 2, 1),
+                                                                                            ('Barrer la sala',                 'Barrer y sacar el polvo de la sala de estar',        'Nueva', '2025-04-18', 2, 1),
+                                                                                            ('Hacer compra: leche, pan, huevos','Comprar víveres básicos para la semana',            'Nueva', '2025-04-17', 3, 1),
+                                                                                            ('Comprar frutas: manzanas y plátanos','Comprar frutas frescas para el desayuno',         'Nueva', '2025-04-17', 3, 1),
+                                                                                            ('Leer capítulo 3 de Base de datos 2','Estudiar el modelo relacional y normalización',  'Nueva', '2025-04-25', 4, 1),
+                                                                                            ('Entregar práctica de SO2',       'Resolver ejercicios prácticos de Sistemas Operativos 2', 'Nueva', '2025-04-28', 8, 1);
+
+-- Usuario 2: María López (id_usuario = 2)
+INSERT INTO tarea (titulo, descripcion, estado, fecha_limite, categoria_id, usuario_id) VALUES
+                                                                                            ('Planchar la ropa',               'Planchar camisas y pantalones',                     'Nueva', '2025-04-18', 2, 2),
+                                                                                            ('Limpiar el baño',                'Limpieza profunda de lavabo y ducha',               'Nueva', '2025-04-18', 2, 2),
+                                                                                            ('Comprar café y azúcar',          'Reponer café molido y paquete de azúcar',           'Nueva', '2025-04-17', 3, 2),
+                                                                                            ('Investigar tema para Comunicación 1','Buscar fuentes para el trabajo de comunicación', 'Nueva', '2025-04-24', 5, 2),
+                                                                                            ('Preparar presentación DS2',      'Diapositivas sobre patrones de diseño en Java',     'Nueva', '2025-04-27', 6, 2),
+                                                                                            ('Resolver ejercicios de Redes 1', 'Practicar subredes y tabla de enrutamiento',        'Nueva', '2025-04-26', 7, 2);
+
+-- Usuario 3: Carlos García (id_usuario = 3)
+INSERT INTO tarea (titulo, descripcion, estado, fecha_limite, categoria_id, usuario_id) VALUES
+                                                                                            ('Sacar la basura',                'Llevar los desechos al contenedor',                 'Nueva', '2025-04-17', 2, 3),
+                                                                                            ('Organizar el garaje',            'Clasificar cajas y barrer el suelo',                'Nueva', '2025-04-19', 2, 3),
+                                                                                            ('Comprar material de oficina',    'Bloc de notas, bolígrafos y post-its',              'Nueva', '2025-04-18', 3, 3),
+                                                                                            ('Estudiar para parcial de Historia','Revisar apuntes de historia contemporánea',        'Nueva', '2025-04-30', 9, 3),
+                                                                                            ('Desarrollar proyecto BD2',       'Implementar esquema ER en MySQL',                   'Nueva', '2025-05-02', 4, 3),
+                                                                                            ('Exposición de Comunicación 1',   'Preparar discurso y diapositivas',                  'Nueva', '2025-05-05', 5, 3);
+
+-- Usuario 4: Ana Fernández (id_usuario = 4)
+INSERT INTO tarea (titulo, descripcion, estado, fecha_limite, categoria_id, usuario_id) VALUES
+                                                                                            ('Regar las plantas',              'Regar plantas de interior y exterior',              'Nueva', '2025-04-17', 2, 4),
+                                                                                            ('Limpiar ventanas',               'Limpieza con limpiavidrios y paño suave',           'Nueva', '2025-04-19', 2, 4),
+                                                                                            ('Lista de compras: arroz, pasta, aceite','Anotar y comprar víveres básicos',             'Nueva', '2025-04-17', 3, 4),
+                                                                                            ('Completar laboratorio SO2',      'Ejercicios de concurrencia en Sistemas Operativos 2','Nueva', '2025-04-29', 8, 4),
+                                                                                            ('Revisar código DS2',             'Code review del proyecto de grupo',                  'Nueva', '2025-05-03', 6, 4),
+                                                                                            ('Leer artículos de Redes 1',      'Estudiar protocolos TCP/IP y OSI',                  'Nueva', '2025-04-26', 7, 4);
+
+-- Usuario 5: Luis Martínez (id_usuario = 5)
+INSERT INTO tarea (titulo, descripcion, estado, fecha_limite, categoria_id, usuario_id) VALUES
+                                                                                            ('Barrer el patio',                'Barrer hojas y polvo del patio delantero',          'Nueva', '2025-04-18', 2, 5),
+                                                                                            ('Lavar la ropa',                  'Separar colores y lavar en la lavadora',            'Nueva', '2025-04-19', 2, 5),
+                                                                                            ('Comprar productos de limpieza',   'Detergente, limpiador multiusos y esponjas',        'Nueva', '2025-04-17', 3, 5),
+                                                                                            ('Preparar entrega Historia',      'Redactar ensayo sobre la Revolución Industrial',     'Nueva', '2025-04-30', 9, 5),
+                                                                                            ('Diseñar esquema BD2',            'Crear diagrama UML para la base de datos',          'Nueva', '2025-05-01', 4, 5),
+                                                                                            ('Redactar informe Comunicación 1','Escribir conclusiones del proyecto de comunicación', 'Nueva', '2025-05-04', 5, 5);
 
