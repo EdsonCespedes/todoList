@@ -4,10 +4,10 @@ target/
 !**/src/test/**/target/
 
 ### IntelliJ IDEA ###
-todoList/.idea/modules.xml
-todoList/.idea/jarRepositories.xml
-todoList/.idea/compiler.xml
-todoList/.idea/libraries/
+todoListm/.idea/modules.xml
+todoListm/.idea/jarRepositories.xml
+todoListm/.idea/compiler.xml
+todoListm/.idea/libraries/
 *.iws
 *.iml
 *.ipr
@@ -38,6 +38,6 @@ build/
 .DS_Store
 
 # Ignorar archivo de configuración real
-todoList/src/main/resources/config.properties
+todoListm/src/main/resources/config.properties
 
-todoList/.idea/
+todoListm/.idea/
