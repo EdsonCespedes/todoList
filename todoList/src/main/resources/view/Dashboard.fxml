@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane stylesheets="@style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.controller.DashboardController">
+
+    <top>
+        <Label fx:id="welcomeLabel" style="-fx-font-size: 24px; -fx-padding: 10;" text="Bienvenido a tu To-Do List" />
+    </top>
+    <center>
+        <VBox alignment="TOP_CENTER" spacing="10">
+            <padding>
+                <Insets bottom="20" left="20" right="20" top="20" />
+            </padding>
+            <HBox prefHeight="36.0" prefWidth="619.0" spacing="10">
+                <ComboBox fx:id="sectionComboBox" prefHeight="34" prefWidth="150" />
+                <Button onAction="#handleAddSection" text="Agregar sección" />
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <Button text="Ver Tareas por Estado" onAction="#verTareasPorEstado" />
+               </children></AnchorPane>
+            <AnchorPane prefHeight="36.0" prefWidth="286.0" />
+                <Button fx:id="logoutButton" alignment="CENTER_RIGHT" onAction="#handleLogout" text="Cerrar sesión" textAlignment="CENTER" />
+            </HBox>
+
+            <TableView fx:id="taskTable" prefHeight="300" prefWidth="600">
+                <columns>
+                    <TableColumn fx:id="taskColumn" prefWidth="300" text="Tarea" />
+                    <TableColumn fx:id="statusColumn" prefWidth="200" text="Estado" />
+                </columns>
+            </TableView>
+
+            <HBox spacing="10">
+                <TextField fx:id="taskField" prefHeight="35" prefWidth="300" promptText="Nueva tarea" />
+                <ComboBox fx:id="statusComboBox" prefHeight="35" prefWidth="150" />
+                <Button fx:id="addTaskButton" onAction="#handleAddTask" text="Agregar tarea" />
+                <Button fx:id="changeStatusButton" onAction="#handleChangeStatus" text="Cambiar Estado" />
+                <Button fx:id="deleteTaskButton" onAction="#handleDeleteTask" text="Eliminar Tarea" />
+                <Button fx:id="eliminarSeccionButton" onAction="#handleEliminarSeccion" text="Eliminar Sección" />
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane>

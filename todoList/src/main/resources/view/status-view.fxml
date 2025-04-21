@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="app.controller.StatusController">
+    <VBox spacing="10" alignment="CENTER" prefWidth="600" prefHeight="400" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0">
+        <Label text="Tareas por Estado" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+        <HBox spacing="20" alignment="CENTER">
+            <VBox>
+                <Label text="Completado"/>
+                <ListView fx:id="listCompletado" prefWidth="180" prefHeight="300"/>
+            </VBox>
+            <VBox>
+                <Label text="En progreso"/>
+                <ListView fx:id="listEnProgreso" prefWidth="180" prefHeight="300"/>
+            </VBox>
+            <VBox>
+                <Label text="Pendiente"/>
+                <ListView fx:id="listPendiente" prefWidth="180" prefHeight="300"/>
+            </VBox>
+        </HBox>
+    </VBox>
+</AnchorPane>
