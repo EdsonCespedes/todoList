@@ -1,47 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>eight.group</groupId>
     <artifactId>todo_list</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <!-- Optional: si quieres un jar ejecutable con todas las dependencias -->
+    <!-- <packaging>jar</packaging> -->
 
     <properties>
+        <!-- versión de Java -->
         <java.version>17</java.version>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <!-- versión de JavaFX -->
+        <javafx.version>17.0.1</javafx.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Para que el compilador use la versión correcta -->
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
     </properties>
 
     <dependencies>
+        <!-- JavaFX Controls (necesario para la UI) -->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
-            <version>17.0.1</version>
+            <version>${javafx.version}</version>
         </dependency>
-        <!-- Conector de MySQL -->
+
+        <!-- JavaFX FXML -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.mail</groupId>
+            <artifactId>jakarta.mail-api</artifactId>
+            <version>2.1.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mindrot</groupId>
+            <artifactId>jbcrypt</artifactId>
+            <version>0.4</version>
+        </dependency>
+
+        <!-- Conector MySQL -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.33</version>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
-            <!-- Plugin para JavaFX -->
+            <!-- Plugin JavaFX -->
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <mainClass>app.Main</mainClass>
+                    <!-- Clase principal de tu App -->
+                    <mainClass>src/main/java/app/Main.java</mainClass>
                 </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
-            <!-- Plugin para ejecutar scripts SQL -->
+            <!-- Plugin SQL para ejecutar tus scripts al iniciar -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>sql-maven-plugin</artifactId>
@@ -49,7 +86,6 @@
                 <executions>
                     <execution>
                         <id>execute-sql</id>
-                        <!-- Se ejecuta en la fase 'initialize' -->
                         <phase>initialize</phase>
                         <goals>
                             <goal>execute</goal>
@@ -57,17 +93,23 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <!-- Driver JDBC para MySQL -->
                     <driver>com.mysql.cj.jdbc.Driver</driver>
                     <url>jdbc:mysql://localhost:3306/todo_list</url>
                     <username>root</username>
-                    <password>password</password>
+                    <password>gabrielito</password>
                     <srcFiles>
                         <srcFile>database/dataBase.sql</srcFile>
                     </srcFiles>
                     <delimiter>;</delimiter>
                     <onError>abort</onError>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>mysql</groupId>
+                        <artifactId>mysql-connector-java</artifactId>
+                        <version>8.0.33</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>

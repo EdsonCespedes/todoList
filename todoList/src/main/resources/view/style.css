@@ -1,0 +1,82 @@
+/* Fondo principal */
+.root {
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-background-color: #F4F7FB; /* Fondo claro */
+}
+
+/* Título llamativo */
+.titulo {
+    -fx-font-size: 28px; /* Aumento el tamaño del título */
+    -fx-font-weight: bold; /* Hago el título más destacado */
+    -fx-text-fill: #003366; /* Azul oscuro para mayor impacto */
+    -fx-padding: 10 0 20 0;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 5, 0, 0, 3); /* Sombra suave */
+}
+
+/* Campos de texto */
+.text-field, .password-field {
+    -fx-pref-width: 250px;
+    -fx-padding: 8;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-border-color: #B0BEC5; /* Gris más suave para los bordes */
+    -fx-background-color: #FFFFFF; /* Fondo blanco para los campos */
+    -fx-font-size: 14px; /* Tamaño de fuente para los campos */
+}
+
+/* ComboBox */
+.ComboBox {
+    -fx-pref-width: 150px;
+    -fx-padding: 8;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-border-color: #B0BEC5; /* Gris suave para los bordes */
+    -fx-background-color: #FFFFFF; /* Fondo blanco */
+}
+
+/* Botón */
+.button {
+    -fx-background-color: #0056b3; /* Azul más oscuro para el botón */
+    -fx-text-fill: white;
+    -fx-padding: 10 20;
+    -fx-background-radius: 6px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-font-size: 16px; /* Un tamaño de fuente mayor para los botones */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0, 0, 3); /* Sombra suave en botones */
+}
+
+/* Hover sobre los botones */
+.button:hover {
+    -fx-background-color: #004494; /* Un azul aún más oscuro en hover */
+    -fx-opacity: 0.9; /* Le da un poco de transparencia al hover */
+}
+
+/* Botón de enlace */
+.link-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #007BFF; /* Azul brillante para los enlaces */
+    -fx-underline: true;
+    -fx-cursor: hand;
+    -fx-font-size: 14px;
+}
+
+/* Botón de cancelación */
+.cancel-button {
+    -fx-background-color: #ddd;
+    -fx-text-fill: #333;
+    -fx-padding: 8 16;
+    -fx-border-radius: 6px;
+}
+
+/* Botón deshabilitado */
+.button:disabled {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-text-fill: transparent;
+}
+
+/* Sombra en botones */
+.button:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 6, 0, 0, 2);
+}
