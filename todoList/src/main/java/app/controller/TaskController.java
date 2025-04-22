@@ -1,6 +1,7 @@
 package app.controller;
 
 import app.model.Task;
+import app.model.Usuario;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.collections.*;
@@ -14,6 +15,7 @@ public class TaskController {
     @FXML private ComboBox<String> sectionComboBox;
     @FXML private TextField taskField;
     final int MAX_LEN = 255;
+    private Usuario usuario;
 
     private ObservableList<Task> tasks;
 
@@ -34,10 +36,19 @@ public class TaskController {
         statusComboBox.getSelectionModel().selectFirst();
 
         sectionComboBox.getItems().clear();
-        sectionComboBox.getItems().addAll(categoriaDAO.obtenerSecciones());
+        //sectionComboBox.getItems().addAll(categoriaDAO.obtenerSecciones());
         sectionComboBox.getSelectionModel().selectFirst();
     }
 
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+
+        if (usuario != null) {
+            sectionComboBox.getItems().clear();
+            sectionComboBox.getItems().addAll(categoriaDAO.obtenerSecciones(usuario.getId()));
+            sectionComboBox.getSelectionModel().selectFirst();
+        }
+    }
 
     @FXML
     public void handleAddTask() {

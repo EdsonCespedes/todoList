@@ -83,8 +83,8 @@ public class DashboardController {
         taskColumn.setCellValueFactory(data -> data.getValue().taskProperty());
         statusColumn.setCellValueFactory(data -> data.getValue().statusProperty());
 
-        sectionComboBox.getItems().clear();
-        sectionComboBox.getItems().addAll(categoriaDAO.obtenerSecciones());
+        //sectionComboBox.getItems().clear();
+//        sectionComboBox.getItems().addAll(categoriaDAO.obtenerSecciones(usuario.getId()));
 
         if (!sectionComboBox.getItems().isEmpty()) {
             sectionComboBox.getSelectionModel().selectFirst();
@@ -135,7 +135,7 @@ public class DashboardController {
         String nombreCategoria = sectionComboBox.getValue();
 
         if (!tarea.isEmpty()) {
-            int categoriaId = categoriaDAO.obtenerIdOCrear(nombreCategoria);
+            int categoriaId = categoriaDAO.obtenerIdOCrear(nombreCategoria, usuario.getId());
             if (categoriaId != -1) {
                 Task nuevaTarea = new Task(tarea, estado);
                 taskDAO.guardarTarea(nuevaTarea, usuario.getId(), categoriaId);
@@ -154,6 +154,10 @@ public class DashboardController {
             this.usuarioId = usuario.getId();
             welcomeLabel.setText("Bienvenido, " + usuario.getNombre() + "!");
             tasks.setAll(taskDAO.obtenerTareasPorUsuario(usuario.getId()));
+
+            sectionComboBox.getItems().clear();
+            sectionComboBox.getItems().addAll(categoriaDAO.obtenerSecciones(usuario.getId()));
+
             String primeraSeccion = sectionComboBox.getValue();
             filtrarTareasPorSeccion(primeraSeccion);
         } else {
@@ -191,7 +195,7 @@ public class DashboardController {
 
             try {
                 sectionComboBox.getItems().add(name);
-                categoriaDAO.obtenerIdOCrear(name);
+                categoriaDAO.obtenerIdOCrear(name, usuario.getId());
                 showAlert("Éxito", "Sección \"" + name + "\" creada correctamente.", Alert.AlertType.INFORMATION);
             } catch (Exception e) {
                 showAlert("Error", "No se pudo crear la sección. Quizá ya existe en la base de datos.", Alert.AlertType.ERROR);

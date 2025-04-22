@@ -11,14 +11,15 @@ import java.util.List;
 
 public class CategoriaDAO {
 
-    public int obtenerIdOCrear(String nombreCategoria) {
+    public int obtenerIdOCrear(String nombreCategoria, int usuarioId) {
         int id = obtenerIdDeCategoria(nombreCategoria);
         if (id != -1) return id;
 
         try (Connection conn = DBConnection.getConnection()) {
-            String sql = "INSERT INTO categorias (nombre) VALUES (?)";
+            String sql = "INSERT INTO categorias (nombre, por_defecto, usuario_id) VALUES (?, 0, ?)";
             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, nombreCategoria);
+            stmt.setInt(2, usuarioId);
             stmt.executeUpdate();
 
             ResultSet rs = stmt.getGeneratedKeys();
@@ -30,6 +31,7 @@ public class CategoriaDAO {
         }
         return -1;
     }
+
     public int obtenerIdDeCategoria(String nombreCategoria) {
         int id = -1;
         String sql = "SELECT id_categoria FROM categorias WHERE nombre = ?";
@@ -47,21 +49,28 @@ public class CategoriaDAO {
         return id;
     }
 
-    public List<String> obtenerSecciones() {
+    public List<String> obtenerSecciones(int usuarioId) {
         List<String> secciones = new ArrayList<>();
-        String sql = "{CALL sp_list_categories()}";
+
+        // Llamar al procedimiento almacenado en lugar de la consulta directa
+        String sql = "{CALL sp_list_categories(?)}"; // Procedimiento almacenado
+
         try (Connection conn = DBConnection.getConnection();
-             CallableStatement stmt = conn.prepareCall(sql);
-             ResultSet rs = stmt.executeQuery()) {
+             CallableStatement stmt = conn.prepareCall(sql)) {
+
+            stmt.setInt(1, usuarioId);
+            ResultSet rs = stmt.executeQuery();
+
             while (rs.next()) {
                 secciones.add(rs.getString("nombre"));
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return secciones;
     }
-
 
     public void agregarCategoria(String nombreCategoria) {
         try (Connection conn = DBConnection.getConnection()) {
